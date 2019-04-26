@@ -1,0 +1,88 @@
+data;
+
+set GENERATORS := G1 G2 G3;
+set GENPARAMS := MC	RU	RD	Pmax	Pmin Ton	Toff	SUR	SDR	K	J	INI	;
+set LINES := L1 L2 L3 L4 L5 L6 L7;
+set LineParams := x PLmax;
+set TIME := 1..14;
+set BUSES := B1 B2 B3 B4 B5 B6;
+set LIN_SEGMENTS := S1 S2 S3;
+
+param GenData (tr): 	
+		MC			RU	RD		Pmax	Pmin 	Ton	Toff	SUR	SDR		K	J	INI	:=
+	G1	1531.5		70	70		220		100		4	4		220	220		100	50	0
+	G2	530.1		60	60		100		10		3	2		100	100		200	100	0
+	G3	314.5		60	60		70		10		1	1		70	70		0	0	0
+;
+
+
+param Len (tr):
+		S1		S2		S3 :=
+	G1	40		40		40	
+	G2	30  	30  	30
+	G3	20		20		20
+;
+
+param Slope (tr):
+		S1		S2		S3 :=
+	G1	13.608	13.644	13.68	
+	G2	40.05	40.11	40.17
+	G3	17.9	18.1	18.3
+;
+
+param GenToBus (tr):
+      B1    B2    B3	B4	B5	B6 :=
+G1    1     0     0		0	0	0
+G2    0     1     0		0	0	0
+G3    0     0     0		0	0	1
+;
+
+param LineToBus (tr):
+      B1    B2    B3	B4	B5	B6 :=
+L1    1     -1     0	0	0	0
+L2    0     1     -1	0	0	0
+L3    1     0      0	-1	0	0
+L4    0     1      0	-1	0	0
+L5	  0		0	   0	1	-1	0
+L6	  0		0	   0	0	1	-1
+L7	  0		0	   1	0	0	-1
+;
+param LineData (tr):
+      x       	PLmax :=
+L1    0.17		200
+L2    0.037		100
+L3    0.258		100
+L4    0.197		100
+L5	  0.037		100
+L6	  0.14		120
+L7	  0.018		100
+;
+
+param Load :=
+1         175.19
+2         165.15
+3         158.67
+4         154.73
+5         155.06
+6         160.48
+7         173.39
+8         177.6
+9         186.81
+10        206.96
+11        228.61
+12        236.10
+13        242.18
+14        243.6
+
+;
+
+for {t in TIME}{
+	let Theta['B1', t] := 0;
+	let Demand['B1', t] := 0 * Load[t];
+	let Demand['B2', t] := 0 * Load[t];
+	let Demand['B3', t] := 0.2 * Load[t];
+	let Demand['B4', t] := 0.4 * Load[t];
+	let Demand['B5', t] := 0.4 * Load[t];
+	let Demand['B6', t] := 0 * Load[t];	
+}
+

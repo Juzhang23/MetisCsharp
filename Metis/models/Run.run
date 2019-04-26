@@ -1,0 +1,22 @@
+reset;
+
+#model DCOPF.mod;
+#data DCOPF.dat;
+#model CTUC.mod;
+#data CTUC.dat;
+#model DTUC_noNetwork.mod;
+#data DTUC_noNetwork.dat;
+
+model CTUC_w_ES.mod;
+data CTUC_w_ES.dat;
+
+option solver 'gurobi';
+solve;
+
+#display P;
+#display PL;
+#display Theta;
+#display I;
+
+
+
